@@ -9,7 +9,7 @@ SET(SRC_LIST main.cpp
 				 basic.cpp	
 	)
 
-ADD_EXECUTABLE(eversec-socks5 ${SRC_LIST})
+ADD_EXECUTABLE(octopus-socks5 ${SRC_LIST})
 
-TARGET_LINK_LIBRARIES(eversec-socks5 pthread)
+TARGET_LINK_LIBRARIES(octopus-socks5 pthread)
 
