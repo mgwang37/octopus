@@ -233,7 +233,6 @@ int Connection::AnalyzeProtocolRequests (char *p_mem, int length, int &cmd)
 
 		SetIPv6AddrWithIPv4 (&m_ClientAddr, &p_mem[4]);
 		memcpy (&m_ClientAddr.sin6_port, &p_mem[8], 2);
-		//LOGE ("V4\n");
 		break;
 	case 0x03:
 		m_ClientAddrOK = false;
@@ -241,7 +240,6 @@ int Connection::AnalyzeProtocolRequests (char *p_mem, int length, int &cmd)
 		memcpy (m_Domainname, &p_mem[5], p_len);
 		m_Domainname[p_len] = 0;
 		memcpy (&m_ClientAddr.sin6_port, &p_mem[5 + p_len], 2);
-		//LOGE ("DNS  %s : %d\n", m_Domainname, htons (m_ClientAddr.sin6_port));
 		DnsServer::DoDNS (this);
 		m_ClientAddr.sin6_family = AF_INET6;
 		break;
@@ -416,8 +414,6 @@ void Connection::DoTcpCreat (int type, uint32_t mask, long p_time)
 		}
 		return;
 	}
-
-	//LOGE ("0000000 !!\n");
 
 	m_ConnectSd = socket (AF_INET6, SOCK_STREAM|SOCK_NONBLOCK, 0);
 	if (m_ConnectSd == -1)

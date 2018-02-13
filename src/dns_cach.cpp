@@ -64,7 +64,7 @@ char *DnsCach::GetIpAddr (char *domainname)
 
 		p_root->current = p_root->current->next;
 		inet_ntop (AF_INET6, ret_val, ppp, 128);
-		LOGE ("[%s]\n", ppp);
+		LOGI ("[%s]\n", ppp);
 		return ret_val;
 	}
 

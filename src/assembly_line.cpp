@@ -332,7 +332,7 @@ Connection *AssemblyLine::AllocConnection (uint64_t &index)
 	p_tmp->m_Step = Connection::eStepNew;
 
 	m_client_sum ++;
-	LOGE ("++thread %d sum %d\n", m_CpuId, m_client_sum);
+	LOGI ("++thread %d sum %d\n", m_CpuId, m_client_sum);
 
 	return p_tmp;
 }
@@ -344,7 +344,7 @@ void AssemblyLine::FreeConnection (Connection *p_tmp)
 	m_ConnectionFreeList = p_tmp;
 
 	m_client_sum --;
-	LOGE ("--thread %d sum %d\n", m_CpuId, m_client_sum);
+	LOGI ("--thread %d sum %d\n", m_CpuId, m_client_sum);
 }
 
 void AssemblyLine::Stop ()

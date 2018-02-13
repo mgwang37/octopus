@@ -211,12 +211,10 @@ void DnsServer::DoWork ()
 
 			if (Cach (p_node))
 			{
-				LOGE ("OKOK!!\n");
 				continue;
 			}
 			else
 			{
-				LOGE ("NONO!!\n");
 				DoOne (p_node);
 			}
 		}
