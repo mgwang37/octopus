@@ -12,7 +12,7 @@ void Profile::PrintfHelpInfo ()
 	printf ("--thread.sum                thread sum\n");
 	printf ("--log.dir                   log output dir\n");
 	printf ("--thread.connections.sum    the max connections of per thread\n");
-	printf ("--heartbeat.cycle           heartbeat cycle microseconds (must small 1000000！)\n");
+	printf ("--heartbeat.cycle           heartbeat cycle microseconds (must small 1000000!)\n");
 	printf ("--access.method             access method : 0 (anonymous), 2(USERNAME/PASSWORD)\n");
 	printf ("--userlist                  userlist file \n");
 	printf ("--help or -v                this message\n");
