@@ -103,6 +103,7 @@ void Profile::ShowInfor ()
 	LOGE (" m_ConnectionPerThread = %d\n", m_ConnectionPerThread);
 	LOGE (" m_HeartBeatCycle = %d\n", m_HeartBeatCycle);
 	LOGE (" m_AccessMethod = %d\n", m_AccessMethod);
+	LOGE (" m_UserListFile = %s\n", m_UserListFile);
 	LOGE ("==================================\n");
 }
 
