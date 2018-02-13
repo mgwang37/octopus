@@ -76,6 +76,15 @@ bool ProxyServer::InitServer (Profile *p_profile)
 		return false;
 	}
 
+	if (p_profile->GetAccessMethod () == 0x02)
+	{
+		if (0 == Connection::LoadUserList (p_profile->GetUserListFile()))
+		{
+			LOGE ("load userlist file faile!!\n");
+			return false;
+		}
+	}
+
 	m_AssemblyLines = new AssemblyLine[m_AssemblyLineSum];
 
 	for (int i = 0; i < m_AssemblyLineSum; i++)

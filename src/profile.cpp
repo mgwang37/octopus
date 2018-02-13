@@ -8,13 +8,14 @@
 
 void Profile::PrintfHelpInfo ()
 {
-	printf ("--listen.port     　        服务端口号\n");
-	printf ("--thread.sum                线程总数\n");
-	printf ("--log.dir                   LOG输出路径，不指定会输出到控制台\n");
-	printf ("--thread.connections.sum    每个线程连接最大数目\n");
-	printf ("--heartbeat.cycle           心跳周期，单位为微妙（参数必须小于1000000！）\n");
-	printf ("--access.method             登录方式: 0 (匿名方式), 2(用户名密码方式)   \n");
-	printf ("--help or -v                帮助信息\n");
+	printf ("--listen.port               listen port\n");
+	printf ("--thread.sum                thread sum\n");
+	printf ("--log.dir                   log output dir\n");
+	printf ("--thread.connections.sum    the max connections of per thread\n");
+	printf ("--heartbeat.cycle           heartbeat cycle microseconds (must small 1000000！)\n");
+	printf ("--access.method             access method : 0 (anonymous), 2(USERNAME/PASSWORD)\n");
+	printf ("--userlist                  userlist file \n");
+	printf ("--help or -v                this message\n");
 }
 
 Profile::Profile (int argc, char *argv[]):m_ListenPort(1024),m_ThreadSum(1),m_LogDir(NULL),m_ConnectionPerThread (1000),
@@ -31,6 +32,7 @@ Profile::Profile (int argc, char *argv[]):m_ListenPort(1024),m_ThreadSum(1),m_Lo
 		{"thread.connections.sum", required_argument, 0,  0 },
 		{"heartbeat.cycle", required_argument, 0,  0 },
 		{"access.method", required_argument, 0,  0 },
+		{"userlist", required_argument, 0,  0 },
 		{"help", no_argument, 0,  0 },
 		{0 , 0, 0,  0}
 	};
@@ -71,6 +73,9 @@ Profile::Profile (int argc, char *argv[]):m_ListenPort(1024),m_ThreadSum(1),m_Lo
 				m_AccessMethod = atoi (optarg);
 				break;
 			case 6:
+				m_UserListFile = strdup (optarg);
+				break;
+			case 7:
 				PrintfHelpInfo ();
 				exit (0);
 			}
@@ -105,11 +110,18 @@ Profile::~Profile ()
 {
 	free (m_LogDir);
 	m_LogDir = NULL;
+	free (m_UserListFile);
+	m_UserListFile = NULL;
 }
 
 char *Profile::GetLogDir ()
 {
 	return m_LogDir;
+}
+
+char *Profile::GetUserListFile ()
+{
+	return m_UserListFile;
 }
 
 int Profile::GetListenPort ()

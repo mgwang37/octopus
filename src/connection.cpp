@@ -8,6 +8,7 @@
 
 #include <sys/epoll.h>
 #include <errno.h>
+#include <stdio.h>
 
 #include "connection.h"
 #include "message_log.h"
@@ -15,6 +16,8 @@
 #include "basic.h"
 
 Connection::Method Connection::m_Method = Connection::eMethodNull;
+
+ map<string, string> Connection::m_UserList;
 
 void Connection::SetSocketAttr (int socket)
 {
@@ -174,6 +177,39 @@ void Connection::DoGetMethod (int type, uint32_t mask, long p_time)
 
 }
 
+bool Connection::LoadUserList (char *file)
+{
+	FILE  *fp;
+	char  *line = NULL;
+	int    read;
+	size_t len = 0;
+
+	fp = fopen (file, "r");
+	if (NULL == fp)
+	{
+		return false;
+	}
+
+	while ((read = getline(&line, &len, fp)) != -1)
+	{
+		int  rett;
+		char name[128];
+		char password[128];
+
+		rett = sscanf (line, "%s %s", name, password);
+		if (rett != 2)
+		{
+			fclose (fp);
+			return false;
+		}
+
+		m_UserList.insert(pair<string, string>(name, password));
+	}
+
+	fclose (fp);
+	return true;
+}
+
 int Connection::AnalyzeProtocolRequests (char *p_mem, int length, int &cmd)
 {
 	if (p_mem[0] != 0x05)
@@ -299,13 +335,68 @@ void Connection::DoGetProtocol (int type, uint32_t mask, long p_time)
 
 void Connection::DoGetAccess (int type, uint32_t mask, long p_time)
 {
+	char user_name[256];
+	char pass_word[256];
+	int ULEN;
+	int PLEN;
+
 	m_OutStop = recv (m_ControlSd, m_OutBuffer, BUFFER_LEN, MSG_DONTWAIT);
 
-	m_OutBuffer[0] = 1;
-	m_OutBuffer[1] = 0;
+	if (m_OutBuffer[0] != 1)
+	{
+		m_Step = eStepTcpClosing;
+		return;
+	}
+
+	ULEN = m_OutBuffer[1];
+
+	if (ULEN >= m_OutStop)
+	{
+		m_Step = eStepTcpClosing;
+		return;
+	}
+
+	bzero (user_name, 256);
+	memcpy (user_name, &m_OutBuffer[2], ULEN);
+
+	PLEN = m_OutBuffer[2 + ULEN];
+
+	if (m_OutStop != (ULEN + PLEN + 3))
+	{
+		m_Step = eStepTcpClosing;
+		return;
+	}
+
+	bzero (pass_word, 256);
+	memcpy (pass_word, &m_OutBuffer[3 + ULEN], PLEN);
+
+	map<string, string>::iterator iter;
+
+	iter = m_UserList.find (user_name);
+
+	if (iter == m_UserList.end())
+	{
+		m_OutBuffer[0] = 1;
+		m_OutBuffer[1] = 1;
+		m_Step = eStepTcpClosing;
+	}
+	else
+	{
+		if (iter->second == pass_word)
+		{
+			m_OutBuffer[0] = 1;
+			m_OutBuffer[1] = 0;
+			m_Step = eStepGetProtocol;
+		}
+		else
+		{
+			m_OutBuffer[0] = 1;
+			m_OutBuffer[1] = 1;
+			m_Step = eStepTcpClosing;
+		}
+	}
 
 	send (m_ControlSd, m_OutBuffer, 2, MSG_DONTWAIT|MSG_NOSIGNAL);
-	m_Step = eStepGetProtocol;
 	m_OutStart = 0;
 	m_OutStop = 0;
 	m_LastTime = p_time;

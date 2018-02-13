@@ -16,6 +16,7 @@ public:
 	int       GetConnectionSum ();
 	uint32_t  GetHeartBeatCycle ();
 	int       GetAccessMethod ();
+	char     *GetUserListFile ();
 
 private:
 	void      PrintfHelpInfo ();
@@ -27,6 +28,7 @@ private:
 	int       m_ConnectionPerThread;
 	uint32_t	 m_HeartBeatCycle;
 	int       m_AccessMethod;
+	char     *m_UserListFile;
 };
 
 #endif /*__CLASS_PROFILE__*/
