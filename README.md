@@ -38,6 +38,13 @@
 * --userlist  ：在　--access.method　为２时指定用户名单
 * --help or -v      ：打印帮助信息
 
+## (4)常见问题
+### １、连接数受限
+　　＃echo "1024 65535" > /proc/sys/net/ipv4/ip_local_port_range
+
+        添加　*          -       nofile          500000　到文件　/etc/security/limits.conf　　
+
+
 
 # ２、English
 ## (1) Features
@@ -68,4 +75,11 @@
     --help or -v                this message
 
 ```
+
+## (4)Question
+### １、connect　limit
+　　＃echo "1024 65535" > /proc/sys/net/ipv4/ip_local_port_range
+
+        add　*          -       nofile          500000　to　file　/etc/security/limits.conf　　
+
 
