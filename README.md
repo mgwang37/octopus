@@ -8,10 +8,10 @@
 1. 高并发高性能
 
 ## (2)编译
-* $cd builder/
-* $cmake ..
-* $make
-* cpack
+* $ cd builder/
+* $ cmake ..
+* $ make
+* $ cpack
 
 ## (3)运行
 　配置从命令行输入，详细参数可以使用帮助：
@@ -28,12 +28,13 @@
     --help or -v                this message
 
 ```
+
 * --listen.port  ：监听的端口
 * --thread.sum　：线程数量
-*  --log.dir　：log信息输出的路径
+* --log.dir　：log信息输出的路径
 * --thread.connections.sum　：每个线程最大的连接数
-*  --heartbeat.cycle 　：超时心跳的间隔
-*   --access.method　：登录方法，０是匿名，２是用户名密码方式，用户名单用　    --userlist  　指定
+* --heartbeat.cycle 　：超时心跳的间隔
+* --access.method　：登录方法，０是匿名，２是用户名密码方式，用户名单用　    --userlist  　指定
 * --userlist  ：在　--access.method　为２时指定用户名单
 * --help or -v      ：打印帮助信息
 
@@ -50,7 +51,7 @@
 * $ cd builder /
 * $ cmake ..
 * $ make
-* cpack
+* $ cpack
 
 ## (3)run
   Configuration input from the command line, detailed parameters can be used to help:
@@ -62,8 +63,8 @@
     --log.dir                   log output dir
     --thread.connections.sum    the max connections of per thread
     --heartbeat.cycle           heartbeat cycle microseconds (must small 1000000!)
-    --access.method             access method : 0 (anonymous), 2(USERNAME/PASSWORD)
-    --userlist                  userlist file 
+    --access.method             access method : 0 (anonymous), 2(USERNAME/PASSWORD) --userlist set the USERNAME/PASSWORD
+    --userlist                  userlist file   (see builder/userlist.txt)
     --help or -v                this message
 
 ```
