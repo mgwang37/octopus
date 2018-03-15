@@ -36,6 +36,7 @@
 * --heartbeat.cycle 　：超时心跳的间隔
 * --access.method　：登录方法，０是匿名，２是用户名密码方式，用户名单用　    --userlist  　指定
 * --userlist  ：在　--access.method　为２时指定用户名单
+* --addr.list :在多网卡系统上可以指定数据从哪几个地址出去，这样可以增加整个系统的连接上限，使用方法：--addr.list 192.168.1.1,192.168.1.2
 * --help or -v      ：打印帮助信息
 
 ## (4)常见问题
@@ -72,6 +73,7 @@
     --heartbeat.cycle           heartbeat cycle microseconds (must small 1000000!)
     --access.method             access method : 0 (anonymous), 2(USERNAME/PASSWORD) --userlist set the USERNAME/PASSWORD
     --userlist                  userlist file   (see builder/userlist.txt)
+    --addr.list                 NIC address list, use like this --addr.list 192.168.1.1,192.168.1.2
     --help or -v                this message
 
 ```

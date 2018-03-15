@@ -17,7 +17,9 @@
 
 Connection::Method Connection::m_Method = Connection::eMethodNull;
 
- map<string, string> Connection::m_UserList;
+map<string, string> Connection::m_UserList;
+
+Profile *Connection::m_Profile;
 
 void Connection::SetSocketAttr (int socket)
 {
@@ -404,7 +406,7 @@ void Connection::DoTcpCreat (int type, uint32_t mask, long p_time)
 {
 	if (false == m_ClientAddrOK)
 	{
-		if (p_time - m_LastTime > 8000000)
+		if (p_time - m_LastTime > 10000000)
 		{
 			m_OutBuffer[1] = 0x06;
 			send (m_ControlSd, m_OutBuffer, m_OutStop, MSG_DONTWAIT|MSG_NOSIGNAL);
@@ -427,6 +429,25 @@ void Connection::DoTcpCreat (int type, uint32_t mask, long p_time)
 	}
 
 	SetSocketAttr (m_ConnectSd);
+
+	struct  sockaddr_in6 *p_ip_addr = m_Profile->GetAddr ();
+
+	if (p_ip_addr)
+	{
+		int ret;
+
+		ret = bind (m_ConnectSd, (const struct sockaddr *)p_ip_addr, sizeof(sockaddr_in6));
+
+		if (ret == -1)
+		{
+			close (m_ConnectSd);
+			m_ConnectSd = -1;
+			m_Step = eStepTcpClosing;
+			LOGE ("TcpBind !!\n");
+			return;
+		}
+		LOGI ("bind OK!\n");
+	}
 
 	connect (m_ConnectSd, (struct sockaddr *)&m_ClientAddr, sizeof(m_ClientAddr));
 	m_Step = eStepTcpConnecting;
@@ -484,6 +505,11 @@ void Connection::DoTcpConnecting (int type, uint32_t mask, long p_time)
 
 	m_OutStart = 0;
 	m_OutStop = 0;
+}
+
+void Connection::SetProfile (Profile *file)
+{
+	m_Profile = file;
 }
 
 void Connection::DoTcpConnected (int type, uint32_t mask, long p_time)

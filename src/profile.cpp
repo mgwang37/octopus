@@ -3,6 +3,8 @@
 #include <string.h>
 #include <stdio.h>
 
+#include <arpa/inet.h>
+
 #include "profile.h"
 #include "message_log.h"
 
@@ -15,6 +17,7 @@ void Profile::PrintfHelpInfo ()
 	printf ("--heartbeat.cycle           heartbeat cycle microseconds (must small 1000000!)\n");
 	printf ("--access.method             access method : 0 (anonymous), 2(USERNAME/PASSWORD)\n");
 	printf ("--userlist                  userlist file \n");
+	printf ("--addr.list                 NIC address list, use like this --addr.list 192.168.1.1,192.168.1.2 \n");
 	printf ("--help or -v                this message\n");
 }
 
@@ -23,6 +26,9 @@ Profile::Profile (int argc, char *argv[]):m_ListenPort(1024),m_ThreadSum(1),m_Lo
 {
 	int c;
 	int option_index = 0;
+
+	m_AddrListSum = 0;
+	bzero (m_AddrListStr, ADDR_LIST_STR_MAX);
 
 	struct option long_options[] =
 	{
@@ -34,6 +40,7 @@ Profile::Profile (int argc, char *argv[]):m_ListenPort(1024),m_ThreadSum(1),m_Lo
 		{"access.method", required_argument, 0,  0 },
 		{"userlist", required_argument, 0,  0 },
 		{"help", no_argument, 0,  0 },
+		{"addr.list", required_argument, 0,  0 },
 		{0 , 0, 0,  0}
 	};
 
@@ -78,10 +85,79 @@ Profile::Profile (int argc, char *argv[]):m_ListenPort(1024),m_ThreadSum(1),m_Lo
 			case 7:
 				PrintfHelpInfo ();
 				exit (0);
+			case 8:
+				GetAddrList (optarg);
+				break;
 			}
 		}
 	}
 
+}
+
+struct sockaddr_in6 *Profile::GetAddr()
+{
+	if (m_AddrListSum == 0)
+	{
+		return NULL;
+	}
+
+	if (m_AddrListIndex >= m_AddrListSum)
+	{
+		m_AddrListIndex = 0;
+	}
+
+	LOGI ("m_AddrListIndex = %d\n", m_AddrListIndex);
+
+	return &m_addr_list[m_AddrListIndex++];
+}
+
+void  Profile::GetAddrList (char *optarg)
+{
+	char p_tmp[256];
+	char *p_str;
+	int  p_tmp_index = 0;
+
+	m_AddrListStr[0] = 0;
+
+	strcat (m_AddrListStr, optarg);
+
+	p_str = &m_AddrListStr[0];
+
+	if (*p_str == 0)
+	{
+		return;
+	}
+
+	while (1)
+	{
+		if (*p_str == '\0')
+		{
+			p_tmp[p_tmp_index] = 0;
+			p_tmp_index = 0;
+
+			m_addr_list[m_AddrListSum].sin6_family = AF_INET6;
+			m_addr_list[m_AddrListSum].sin6_port = 0;
+			inet_pton (AF_INET6, p_tmp, m_addr_list[m_AddrListSum].sin6_addr.s6_addr);
+			m_AddrListSum ++;
+			break;
+		}
+		else if (*p_str == ',')
+		{
+			p_tmp[p_tmp_index] = 0;
+			p_tmp_index = 0;
+
+			m_addr_list[m_AddrListSum].sin6_family = AF_INET6;
+			m_addr_list[m_AddrListSum].sin6_port = 0;
+			inet_pton (AF_INET6, p_tmp, m_addr_list[m_AddrListSum].sin6_addr.s6_addr);
+			m_AddrListSum ++;
+		}
+		else
+		{
+			p_tmp[p_tmp_index] = *p_str;
+		}
+
+		p_str ++;
+	}
 }
 
 uint32_t Profile::GetHeartBeatCycle ()
@@ -104,6 +180,7 @@ void Profile::ShowInfor ()
 	LOGE (" m_HeartBeatCycle = %d\n", m_HeartBeatCycle);
 	LOGE (" m_AccessMethod = %d\n", m_AccessMethod);
 	LOGE (" m_UserListFile = %s\n", m_UserListFile);
+	LOGE (" m_AddrListStr = %s\n", m_AddrListStr);
 	LOGE ("==================================\n");
 }
 

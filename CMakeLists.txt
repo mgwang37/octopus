@@ -2,7 +2,9 @@ cmake_minimum_required (VERSION 2.8)
 
 project (octopus-socks5)
 
-set(CMAKE_CXX_FLAGS "-g -Wall")
+#set(CMAKE_CXX_FLAGS "-g -Wall -D DEBUG")
+set(CMAKE_CXX_FLAGS_DEBUG   "-g -Wall -D DEBUG")
+set(CMAKE_CXX_FLAGS_RELEASE "-g -Wall")
 
 add_subdirectory(src bin)
 

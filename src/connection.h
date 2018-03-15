@@ -6,6 +6,8 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 
+#include "profile.h"
+
 #define BUFFER_LEN  2048
 
 #include <map>
@@ -43,6 +45,7 @@ public:
 	void InitNewOne (int new_socket, long p_time, int epollfd);
 	static void SetSocketAttr (int socket);
 	static bool LoadUserList (char *file_name);
+	static void SetProfile (Profile *file);
 
 private:
 	void DoGetMethod (int type, uint32_t mask, long p_time);
@@ -60,7 +63,8 @@ private:
 	friend class DnsServer;
 	WorkStep  m_Step;
 
-	static Method m_Method;
+	static Method   m_Method;
+	static Profile *m_Profile;
 
 	int   m_ControlSd;
 	int   m_ConnectSd;

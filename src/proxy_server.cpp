@@ -60,6 +60,8 @@ bool ProxyServer::InitServer (Profile *p_profile)
 	m_AssemblyLineSum = p_profile->GetThreadSum ();
 	m_HeartBeatCycle = p_profile->GetHeartBeatCycle ();
 
+	Connection::SetProfile (p_profile);
+
 	p_cpu_sum = GetCpuSum ();
 
 	LOGE ("CPU sum :%d\n", p_cpu_sum);
