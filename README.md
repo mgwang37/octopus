@@ -25,6 +25,7 @@
     --heartbeat.cycle           heartbeat cycle microseconds (must small 1000000!)
     --access.method             access method : 0 (anonymous), 2(USERNAME/PASSWORD)
     --userlist                  userlist file 
+　　--addr.list                 NIC address list, use like this --addr.list 192.168.1.1,192.168.1.2
     --help or -v                this message
 
 ```
@@ -83,5 +84,4 @@
 1. ＃echo "1024 65535" > /proc/sys/net/ipv4/ip_local_port_range
 
 1. add　*          -       nofile          500000　to　file　/etc/security/limits.conf　　
-
 
