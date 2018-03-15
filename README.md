@@ -40,9 +40,9 @@
 
 ## (4)常见问题
 ### １、连接数受限
-　　＃echo "1024 65535" > /proc/sys/net/ipv4/ip_local_port_range
+1. ＃echo "1024 65535" > /proc/sys/net/ipv4/ip_local_port_range
 
-        添加　*          -       nofile          500000　到文件　/etc/security/limits.conf　　
+1. 添加　*          -       nofile          500000　到文件　/etc/security/limits.conf　　
 
 
 
@@ -78,8 +78,8 @@
 
 ## (4)Question
 ### １、connect　limit
-　　＃echo "1024 65535" > /proc/sys/net/ipv4/ip_local_port_range
+1. ＃echo "1024 65535" > /proc/sys/net/ipv4/ip_local_port_range
 
-        add　*          -       nofile          500000　to　file　/etc/security/limits.conf　　
+1. add　*          -       nofile          500000　to　file　/etc/security/limits.conf　　
 
 
