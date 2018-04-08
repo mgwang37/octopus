@@ -81,6 +81,7 @@
 
 ## (4)Question
 ### １、connect　limit
+
 1. ＃echo "1024 65535" > /proc/sys/net/ipv4/ip_local_port_range
 
 1. add　*          -       nofile          500000　to　file　/etc/security/limits.conf　　
