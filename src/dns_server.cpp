@@ -111,7 +111,7 @@ bool DnsServer::Cach (Connection *p_target)
 {
 	char *ip;
 
-	ip = m_Cach.GetIpAddr (p_target->m_Domainname);
+	ip = m_Cache.GetIpAddr (p_target->m_Domainname);
 
 	if (ip)
 	{
@@ -144,11 +144,11 @@ void DnsServer::DoOne (Connection *p_target)
 		return ;
 	}
 	
-	m_Cach.AddDNS (p_target->m_Domainname);
+	m_Cache.AddDNS (p_target->m_Domainname);
 
 	DNS_ROOT *p_dns_root;
 
-	p_dns_root = m_Cach.GetDnsRoot (p_target->m_Domainname);
+	p_dns_root = m_Cache.GetDnsRoot (p_target->m_Domainname);
 
 	for (curr = answer; curr != NULL; curr = curr->ai_next)
 	{
