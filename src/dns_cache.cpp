@@ -1,14 +1,14 @@
 #include <stdlib.h>
 #include <arpa/inet.h>
 
-#include "dns_cach.h"
+#include "dns_cache.h"
 #include "message_log.h"
 
-DnsCach::DnsCach ()
+DnsCache::DnsCache ()
 {
 }
 
-DnsCach::~DnsCach ()
+DnsCache::~DnsCache ()
 {
 	map<string, DNS_ROOT>::iterator iter;
 
@@ -19,7 +19,7 @@ DnsCach::~DnsCach ()
 
 }
 
-void DnsCach::FreeNood (DNS_ROOT *p_root)
+void DnsCache::FreeNood (DNS_ROOT *p_root)
 {
 	DNS_NOOD *p_tmp;
 
@@ -35,7 +35,7 @@ void DnsCach::FreeNood (DNS_ROOT *p_root)
 
 }
 
-char *DnsCach::GetIpAddr (char *domainname)
+char *DnsCache::GetIpAddr (char *domainname)
 {
 	char ppp[128];
 
@@ -70,7 +70,7 @@ char *DnsCach::GetIpAddr (char *domainname)
 
 }
 
-void DnsCach::AddDNS (char *domainname)
+void DnsCache::AddDNS (char *domainname)
 {
 	DNS_ROOT p_tmp;
 
@@ -80,7 +80,7 @@ void DnsCach::AddDNS (char *domainname)
 	m_MapDNS.insert(pair<string, DNS_ROOT>(domainname, p_tmp));
 }
 
-DNS_ROOT *DnsCach::GetDnsRoot (char *domainname)
+DNS_ROOT *DnsCache::GetDnsRoot (char *domainname)
 {
 	map<string, DNS_ROOT>::iterator iter;
 
