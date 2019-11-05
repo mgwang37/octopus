@@ -30,7 +30,7 @@ void Connection::SetSocketAttr (int socket)
 
 	setsockopt (socket, SOL_SOCKET, SO_LINGER, &pp, sizeof(pp));
 
-	unsigned int timeout = 5000;
+	unsigned int timeout = STEP_TIME_OUT;
 
 	setsockopt(socket, IPPROTO_TCP, TCP_USER_TIMEOUT, &timeout, sizeof(timeout));
 
@@ -111,11 +111,12 @@ void Connection::DoGetMethod (int type, uint32_t mask, long p_time)
 	//超时处理
 	if (type != 1)
 	{
-		if (p_time - m_LastTime > 1000000)
+		if (p_time - m_LastTime > STEP_TIME_OUT)
 		{
 			m_Step = eStepClosed;
 			close (m_ControlSd);
 			m_ControlSd = -1;
+			LOGE ("[DoGetMethod] time out !!\n");
 		}
 		return ;
 	}
@@ -195,8 +196,8 @@ bool Connection::LoadUserList (char *file)
 	while ((read = getline(&line, &len, fp)) != -1)
 	{
 		int  rett;
-		char name[128];
-		char password[128];
+		char name[256];
+		char password[256];
 
 		rett = sscanf (line, "%s %s", name, password);
 		if (rett != 2)
@@ -263,11 +264,12 @@ void Connection::DoGetProtocol (int type, uint32_t mask, long p_time)
 	//超时处理
 	if (type != 1)
 	{
-		if (p_time - m_LastTime > 1000000)
+		if (p_time - m_LastTime > STEP_TIME_OUT)
 		{
 			m_Step = eStepClosed;
 			close (m_ControlSd);
 			m_ControlSd = -1;
+			LOGE ("[DoGetProtocol] time out !!\n");
 		}
 		return ;
 	}
@@ -406,13 +408,13 @@ void Connection::DoTcpCreat (int type, uint32_t mask, long p_time)
 {
 	if (false == m_ClientAddrOK)
 	{
-		if (p_time - m_LastTime > 10000000)
+		if (p_time - m_LastTime > STEP_TIME_OUT*5)
 		{
 			m_OutBuffer[1] = 0x06;
 			send (m_ControlSd, m_OutBuffer, m_OutStop, MSG_DONTWAIT|MSG_NOSIGNAL);
 			m_Step = eStepTcpClosing;
 			m_LastTime = p_time;
-			LOGE ("creat time out !!\n");
+			LOGE ("[DoTcpCreat] time out !!\n");
 		}
 		return;
 	}
@@ -463,10 +465,11 @@ void Connection::DoTcpConnecting (int type, uint32_t mask, long p_time)
 	getsockopt (m_ConnectSd, SOL_SOCKET, SO_ERROR, &p_err, &p_len);
 	if (p_err == EINPROGRESS)
 	{
-		if (p_time - m_LastTime > 9000000)
+		if (p_time - m_LastTime > STEP_TIME_OUT*4)
 		{
 			m_Step = eStepTcpClosing; 
 			m_LastTime = p_time;
+			LOGE ("DoTcpConnecting:EINPROGRESS");
 		}
 		return;
 	}
@@ -476,6 +479,7 @@ void Connection::DoTcpConnecting (int type, uint32_t mask, long p_time)
 		send (m_ControlSd, m_OutBuffer, m_OutStop, MSG_DONTWAIT|MSG_NOSIGNAL);
 		m_Step = eStepTcpClosing; 
 		m_LastTime = p_time;
+		LOGE ("DoTcpConnecting:ENETUNREACH");
 		return;
 	}
 	else if (p_err == ECONNREFUSED)
@@ -484,6 +488,7 @@ void Connection::DoTcpConnecting (int type, uint32_t mask, long p_time)
 		send (m_ControlSd, m_OutBuffer, m_OutStop, MSG_DONTWAIT|MSG_NOSIGNAL);
 		m_Step = eStepTcpClosing; 
 		m_LastTime = p_time;
+		LOGE ("DoTcpConnecting:ECONNREFUSED");
 		return;
 	}
 
@@ -624,7 +629,7 @@ void Connection::DoTcpConnected (int type, uint32_t mask, long p_time)
 void Connection::DoTcpClosing (int type, uint32_t mask, long p_time)
 {
 
-	if (p_time - m_LastTime > 3000000)
+	if (p_time - m_LastTime > STEP_TIME_OUT*3)
 	{
 		if (m_ControlSd > 0)
 		{

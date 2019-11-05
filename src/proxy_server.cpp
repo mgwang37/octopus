@@ -24,7 +24,7 @@ ProxyServer::ProxyServer ()
 int ProxyServer::GetCpuSum ()
 {
 	int ret;
-	char p_mem[64];
+	char p_mem[256];
 	FILE *p_sh = NULL; 
 		
 	p_sh = popen ("cat /proc/cpuinfo|grep processor|wc -l", "r");

@@ -83,7 +83,7 @@ private:
 
 	bool                m_ClientAddrOK;
 	struct sockaddr_in6 m_ClientAddr;
-	char                m_Domainname[128];
+	char                m_Domainname[260];
 
 	static map<string, string> m_UserList;
 

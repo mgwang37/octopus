@@ -9,7 +9,7 @@
 
 ## (2)编译
 * $ cd builder/
-* $ cmake ..
+* $ cmake ../ -DCMAKE_BUILD_TYPE=Debug    或者  cmake ../ -DCMAKE_BUILD_TYPE=Release
 * $ make
 * $ cpack
 
@@ -58,7 +58,7 @@
 
 ## (2)compile
 * $ cd builder /
-* $ cmake ..
+* $ cmake ../ -DCMAKE_BUILD_TYPE=Debug    or  cmake ../ -DCMAKE_BUILD_TYPE=Release
 * $ make
 * $ cpack
 

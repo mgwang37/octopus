@@ -2,7 +2,7 @@
 #define __CLASS_DNS_SERVER__
 
 #include "connection.h"
-#include "dns_cach.h"
+#include "dns_cache.h"
 
 class DnsServer
 {
@@ -26,7 +26,7 @@ private:
 	static pthread_t  m_ThreadID;
 	static bool       m_WorkON;
 
-	DnsCach           m_Cach;
+	DnsCache          m_Cache;
 };
 
 #endif /*__CLASS_DNS_SERVER__*/

@@ -10,9 +10,9 @@
 #include "assembly_line.h"
 #include "message_log.h"
 
-#define PTHREAD_STACK_SIZE (1024*1024*10)
+#define  PTHREAD_STACK_SIZE (1024*1024*10)
 
-#define  MAX_EVENTS   512
+#define  MAX_EVENTS          512
 
 long AssemblyLine::m_HeartBeatTimes = 0;
 

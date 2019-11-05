@@ -5,7 +5,7 @@ SET(SRC_LIST main.cpp
 				 message_log.cpp
 				 profile.cpp
 				 dns_server.cpp
-				 dns_cach.cpp
+				 dns_cache.cpp
 				 basic.cpp	
 	)
 
